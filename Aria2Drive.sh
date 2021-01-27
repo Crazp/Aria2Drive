@@ -26,24 +26,6 @@ if dpkg -l | grep -Eqi "nginx|apache|caddy"; then
   exit
 fi
 
-#set up bbr
-if lsmod | grep -Eqi bbr; then
-  echo "bbr is running"
-else
-  echo "set up bbr"
-  echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
-  echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
-  sysctl -p
-  if lsmod | grep -Eqi bbr; then
-    echo "bbr is installed"
-  else
-    echo "There is something wrong with bbr"
-    echo "please check your system"
-    echo "***EXIT***"
-    sleep 1
-    exit
-  fi
-fi
 
 #update system and install needed software
 apt update -y && apt upgrade -y
